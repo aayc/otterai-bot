@@ -1,21 +1,15 @@
 {
-  "name": "electron-quick-start",
+  "name": "feinstein_voicemail_transcriber",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Transcribe a folder of voicemail files by uploading to Otter.ai",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
+  "repository": "https://github.com/aayc/otterai-bot",
+  "keywords": [],
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
@@ -39,7 +33,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "electron_quick_start"
+            "name": "feinstein_voicemail_transcriber"
           }
         },
         {
@@ -47,14 +41,6 @@
           "platforms": [
             "darwin"
           ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
         }
       ]
     }
