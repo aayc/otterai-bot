@@ -3,6 +3,8 @@ const {app, BrowserWindow, ipcMain } = require('electron')
 const puppeteer = require('puppeteer');
 const path = require('path');
 const dotenv = require('dotenv');
+const fs = require('fs')
+const moment = require("moment")
 dotenv.config();
 
 function createWindow () {
@@ -16,11 +18,10 @@ function createWindow () {
   })
 
   mainWindow.loadFile('index.html')
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 }
 
 async function uploadAudioFiles(filesToUpload) {
-  console.log("Starting upload of", filesToUpload.length, "files")
   const browser = await puppeteer.launch({ headless: false });
 
   // Open new tab and log in
@@ -43,7 +44,6 @@ async function uploadAudioFiles(filesToUpload) {
   const uploadSuccesses = []
   for (const file of filesToUpload) {
       const browse = await page.$("input[type='file']")
-      console.log("Uploading " + file)
       //await browse.uploadFile(file);
       //await page.waitForTimeout(50000)
       uploadSuccesses.push(file)
@@ -51,6 +51,36 @@ async function uploadAudioFiles(filesToUpload) {
   browser.close();
 
   return uploadSuccesses
+}
+
+function readVoicemailFiles(folder, email, password) {
+  fs.writeFileSync("./data.json", JSON.stringify({folder, email, password}))
+  const directoryPath = folder
+  if (!fs.existsSync(directoryPath)) {
+    return []
+  }
+
+  const files = fs.readdirSync(directoryPath)
+                  .filter(fname => !fs.lstatSync(directoryPath + "/" + fname).isDirectory())
+                  .filter(fname => [".mp3", ".wav", ".m4a"].some(ext => path.extname(fname).endsWith(ext)))
+                  .map(fname => directoryPath + "/" + fname);
+
+  if (!fs.existsSync(directoryPath + "/processing")) {
+      fs.mkdirSync(directoryPath + "/processing");
+  }
+
+  let id = 1
+  const newFilePaths = []
+  for (const file of files) {
+      const stats = fs.statSync(file)
+      const createdAt = moment(stats.birthtime).format("YYYY-MM-DD")
+      const newFileName = createdAt + "-" + id + path.extname(file)
+      const newFilePath = directoryPath +  "/processing/" + newFileName
+      fs.copyFileSync(file, newFilePath)
+      id += 1
+      newFilePaths.push(newFilePath)
+  }
+  return newFilePaths
 }
 
 app.whenReady().then(() => {
@@ -71,5 +101,14 @@ ipcMain.handle("upload", async (event, data) => {
     return ret
   } else {
     return { error: "Message corrupted (no fileList)", result: null }
+  }
+})
+
+ipcMain.handle("read", async (event, data) => {
+  if (data.folder) {
+    const ret = { error: null, result: readVoicemailFiles(data.folder, data.email, data.password) }
+    return ret
+  } else {
+    return { error: "Message corrupted (no folder)", result: null }
   }
 })

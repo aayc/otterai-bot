@@ -10,11 +10,25 @@
   <body>
     <h1>Upload audio files to Otter.ai</h1>
 
-    <p>Files that will be uploaded: <span id="fileList"></span></p>
-    <p>Files successfully uploaded so far: <span id="successFileList">None</span></p>
+    <p>Folder with voicemails</p>
+    <input type="text" style="width: 400px" id="folder" value="" />
 
-    <button id="uploadButton">Upload</button>
+    <p>Otter.ai email</p>
+    <input type="text" id="email" value="" />
 
+    <p>Otter.ai password</p>
+    <input type="password" id="password" value="" />
+
+    <button id="readButton">Read</button>
+
+    <hr></hr>
+
+    <div id="uploadDiv" style="display: none">
+      <p>Files that will be uploaded: <span id="fileList"></span></p>
+      <p>Files successfully uploaded so far: <span id="successFileList">None</span></p>
+
+      <button id="uploadButton">Upload</button>
+  </div>
 
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>
