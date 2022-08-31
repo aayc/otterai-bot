@@ -21,7 +21,7 @@
     "electron": "^19.0.9"
   },
   "dependencies": {
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.2",
     "electron-squirrel-startup": "^1.0.0",
     "moment": "^2.29.4",
     "puppeteer": "^15.5.0"
