@@ -24,7 +24,7 @@
     "dotenv": "^16.0.1",
     "electron-squirrel-startup": "^1.0.0",
     "moment": "^2.29.4",
-    "puppeteer": "^15.5.0"
+    "puppeteer": "^19.5.2"
   },
   "config": {
     "forge": {
